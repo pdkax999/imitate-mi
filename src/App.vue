@@ -19,7 +19,15 @@ import storage from "./storage";
   }
 </script>
 
-<style scoped>
+<style lang="less">
+
+@import "./assets/less/reset.less";
+
+
+
+
+
+
 
  
 </style>

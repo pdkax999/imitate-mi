@@ -22,20 +22,14 @@ import NavFooter from "../../components/NavFooter";
     },
     mounted(){
       
-      console.log('1');
+
       
     }
   }
 </script>
 
-<style scoped lang="less">
-  .box{
-    .box1{
-      width: 20px;
-      height: 20px;
-      background-color: aqua;
-    }
-  }
+<style  lang="less">
+
 
  
 </style>
