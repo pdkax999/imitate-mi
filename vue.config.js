@@ -1,12 +1,9 @@
-
- module.exports={
-  lintOnSave: false,
-  devServer: {
-    
-    host: 'localhost',
-    port: 8080,
+module.exports = {
+  devServer:{
+    host:'localhost',
+    port:8080,
     proxy:{
-      '/api': {
+      '/api':{
         target:'http://mall-pre.springboot.cn',
         changeOrigin:true,
         pathRewrite:{
@@ -14,11 +11,14 @@
         }
       }
     }
-
+  },
+  // publicPath:'/app',
+  // outputDir:'dist',
+  // indexPath:'index2.html',
+  // lintOnSave:false,
+  lintOnSave: false,
+  productionSourceMap:true,
+  chainWebpack:(config)=>{
+    config.plugins.delete('prefetch');
   }
- }
-
-
-
-
-
+}

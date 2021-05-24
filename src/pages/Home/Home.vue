@@ -1,10 +1,6 @@
 <template>
   <div>
-
-    <div class="box">
-      <div class="box1"></div>
-    </div>
-
+    
     <Navbar/>  
     <router-view></router-view>
     <NavFooter/>
@@ -28,7 +24,7 @@ import NavFooter from "../../components/NavFooter";
   }
 </script>
 
-<style  lang="less">
+<style >
 
 
  
