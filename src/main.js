@@ -46,6 +46,7 @@ axios.interceptors.response.use(function(response){
     return Promise.reject(res);
 
   }else{
+
      Message.warning(res.msg);
 
     return Promise.reject(res);
@@ -54,7 +55,8 @@ axios.interceptors.response.use(function(response){
 },(error)=>{
      
   Message.error(error.message);
-  return  new Promise(()=>{})
+
+   return  new Promise(()=>{})
 });
 
 

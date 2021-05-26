@@ -1,195 +1,455 @@
 <template>
-<div class="container main">
+ <div>
 
-  <div class="wrapper-info">
-    <div class="menu-detail">
-     <div class="menuLeft">
-       <ul>
-         <li>
-           <a href="javascript:;">手机 电话卡  <span class="fa  fa-angle-right"></span></a>
-           <div class="categoryDetail">
+   
+  <div class="container main">
+    <div class="wrapper-info">
+      <div class="menu-detail">
+        <div class="menuLeft">
+          <ul>
+            <li>
+              <a href="javascript:;">
+                手机 电话卡
+                <span class="fa fa-angle-right"></span>
+              </a>
+              <div class="categoryDetail">
+                <ul class="itemList">
+                  <li v-for="(url,index) in imgUrl">
+                    <a href="javascrit:;">
+                      <img :src="`/assets/imgs/${url.url}`" alt />
+                      <span>{{url.name}}</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <a href="javascript:;">
+                电视 盒子
+                <span class="fa fa-angle-right"></span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:;">
+                笔记本 平板
+                <span class="fa fa-angle-right"></span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:;">
+                家电 插线板
+                <span class="fa fa-angle-right"></span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:;">
+                出行 穿戴
+                <span class="fa fa-angle-right"></span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:;">
+                智能 路由器
+                <span class="fa fa-angle-right"></span>
+              </a>
+            </li>
 
-
-           </div>
-         </li>
-         <li>
-           <a href="javascript:;">电视 盒子  <span class="fa  fa-angle-right"></span></a>
-         </li>
-         <li>
-           <a href="javascript:;">笔记本 平板 <span class="fa  fa-angle-right"></span></a>
-         </li>
-         <li>
-           <a href="javascript:;">家电 插线板 <span class="fa  fa-angle-right"></span></a>
-         </li>
-         <li>
-           <a href="javascript:;">出行 穿戴 <span class="fa fa-angle-right"></span></a>
-         </li>
-         <li>
-           <a href="javascript:;">智能 路由器 <span class="fa fa-angle-right"></span></a>
-         </li>
-        
-         <li>
-           <a href="javascript:;">电源 配件<span class="fa fa-angle-right"></span></a>
-         </li>
-         <li>
-           <a href="javascript:;">生活 箱包<span class="fa fa-angle-right"></span></a>
-         </li>
-       </ul>
-
-
-     </div>
-   <div class="slideShow">
-
-      <swiper :options="swiperOptions">
-
-          <swiper-slide>
-          
-            <a href="javascript:;"><img src="../../../assets/imgs/slider/slide-1.jpg" alt=""></a>
-          </swiper-slide>
-          <swiper-slide>   <a href="javascript:;"><img src="../../../assets/imgs/slider/slide-2.jpg" alt=""></a></swiper-slide>
-          <swiper-slide>   <a href="javascript:;"><img src="../../../assets/imgs/slider/slide-3.jpg" alt=""></a></swiper-slide>
-          <swiper-slide>  <a href="javascript:;"><img src="../../../assets/imgs/slider/slide-4.jpg" alt=""></a></swiper-slide>
-          <swiper-slide>   <a href="javascript:;"><img src="../../../assets/imgs/slider/slide-5.jpg" alt=""></a></swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
-        <div class="swiper-button-prev" slot="button-prev"></div>
-        <div class="swiper-button-next" slot="button-next"></div>
-      </swiper>
-   </div>
-</div>
-  <div class="banner">
-      <a href="javascript:;">
-          <img src="../../../assets/imgs/banner-1.png" alt="">  
-      </a>
-  </div>   
-
+            <li>
+              <a href="javascript:;">
+                电源 配件
+                <span class="fa fa-angle-right"></span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:;">
+                生活 箱包
+                <span class="fa fa-angle-right"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="slideShow">
+          <swiper :options="swiperOptions">
+            <swiper-slide>
+              <a href="javascript:;">
+                <img src="../../../assets/imgs/slider/slide-1.jpg" alt />
+              </a>
+            </swiper-slide>
+            <swiper-slide>
+              <a href="javascript:;">
+                <img src="../../../assets/imgs/slider/slide-2.jpg" alt />
+              </a>
+            </swiper-slide>
+            <swiper-slide>
+              <a href="javascript:;">
+                <img src="../../../assets/imgs/slider/slide-3.jpg" alt />
+              </a>
+            </swiper-slide>
+            <swiper-slide>
+              <a href="javascript:;">
+                <img src="../../../assets/imgs/slider/slide-4.jpg" alt />
+              </a>
+            </swiper-slide>
+            <swiper-slide>
+              <a href="javascript:;">
+                <img src="../../../assets/imgs/slider/slide-5.jpg" alt />
+              </a>
+            </swiper-slide>
+            <div class="swiper-pagination" slot="pagination"></div>
+            <div class="swiper-button-prev" slot="button-prev"></div>
+            <div class="swiper-button-next" slot="button-next"></div>
+          </swiper>
+        </div>
+      </div>
+      <div class="banner">
+        <a href="javascript:;">
+          <img src="../../../assets/imgs/banner-1.png" alt />
+        </a>
+      </div>
+    </div>
   </div>
 
-     
-   </div>
+
+
+  <div class="newGoods">
+      <div class="container">
+        <div class="phone">
+          <h3 class="title">手机</h3>
+        </div>
+        <div class="detail">
+          <div class="left">
+            <a href="javascript:;">
+              <img src="../../../assets/imgs/mix-alpha.jpg" alt />
+            </a>
+          </div>
+          <div class="newPhones">
+            <ul v-for="(phs,index) in phoneArrs" :key='index'>
+              <li  v-for="(ph,index) in phs" :key='index'>
+               
+                <span :class="{hide:(index+1)%2==0 ? true : false}">新品</span>
+                 
+                <div class="show">
+                  <img :src="ph.mainImage" alt="">
+                </div>
+
+                <div class="info">
+                 <p>
+                   <span>{{ph.name}}</span>
+                   <span>{{ph.subtitle}}</span>
+                 </p>
+                  <a href="javascript:;">
+                {{ph.price}}元 <span class='fa fa-shopping-cart'> </span>
+                </a>
+                </div>
+                </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
 </template>
 
 <script type="text/ecmascript-6">
 
-import 'swiper/dist/css/swiper.css'
+import chunk from "lodash/chunk";
 
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import "swiper/dist/css/swiper.css";
 
-  export default {
-  components:{
-    swiper, 
-    swiperSlide 
+import { swiper, swiperSlide } from "vue-awesome-swiper";
+
+export default {
+
+  components: {
+    swiper,
+    swiperSlide
   },
-   data() {
-      return {
-        swiperOptions: {
-          pagination: {
-            el: '.swiper-pagination',
-            clickable :true,
-          },
-            loop : true,
-          effect : 'cube',
-            cubeEffect: {
-              shadow:false,
-              
-          
-          
+  data() {
+    return {
+      swiperOptions: {
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true
+        },
+        loop: true,
+        effect: "cube",
+        cubeEffect: {
+          shadow: false
         },
         navigation: {
-       nextEl: '.swiper-button-next',
-       prevEl: '.swiper-button-prev',
-     },
-          // autoplay:true,
-          loop:true,
-         
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        },
+        // autoplay:true,
+        loop: true
+      },
+      imgUrl: [
+        {
+          key: 1,
+          url: "item-box-1.png",
+          name: "小米cc9"
+        },
+        {
+          key: 1,
+          url: "item-box-1.png",
+          name: "小米青春版"
+        },
+        {
+          key: 1,
+          url: "item-box-1.png",
+          name: "Redmi K20 Pro"
+        },
+        {
+          key: 1,
+          url: "item-box-1.png",
+          name: " 移动4G专区 "
         }
-      }
-    },
+      ],
+      phoneArrs:[]
+    };
+  },
+  mounted(){
+
+    this.getPhones()
+
+  },
+  methods:{
+    getPhones(){
     
-  
-  
+     this.axios.get('/products',{
+       params:{
+         categoryId:'100012',
+         pageSize:14
+       }
+     }).then((rea)=>{
+
+      let arr = rea.list.slice(6,14)
+
+      this.phoneArrs = chunk(arr,4)
+       
+     })
+
+    }
   }
+};
 </script>
 <style lang='scss'>
+.main {
+  .wrapper-info {
+    height: 641px;
+    // background: #bfa;
+  }
+  .menuLeft {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 264px;
+    height: 399px;
+    padding: 26px 0;
+    z-index: 5;
+    background-color: rgba(85, 88, 90, 0.48);
 
-  .main{
+    & > ul {
+      & > li {
+        height: 50px;
+        & > a {
+          line-height: 50px;
+          color: #fff;
+          font-size: 16px;
+          padding: 0 30px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
 
-    .wrapper-info{
-      height: 641px;
-      // background: #bfa;
+          .fa {
+            font-size: 20px;
+          }
+        }
+        &:hover {
+          background-color: #ff6700;
+        }
+      }
 
+      & > li:first-child:hover .categoryDetail {
+        display: block;
+      }
     }
-    .menuLeft{
+
+    .categoryDetail {
+      width: 962px;
+      height: 451px;
       position: absolute;
-      left: 0;
+      background: #fff;
+      left: 264px;
       top: 0;
-      width: 264px;
-      height: 399px;
-      padding:26px 0;
-      z-index: 5;
-      background-color: rgba(85,88,90,.48);
+      border: 1px solid #e5e5e5;
+      display: none;
+      overflow: hidden;
+      .itemList {
+        li {
+          width: 25%;
+          height: 75px;
+          float: left;
 
-        ul{
+          & > a {
+            display: flex;
+            align-items: center;
+            line-height: 75px;
+            justify-content: center;
+            font-size: 16px;
+            color: #333;
+          }
 
-          li{
+          img {
+            width: 42px;
+            height: 35px;
+            margin-right: 15px;
+          }
+        }
+      }
+    }
+  }
+
+  .banner {
+    height: 130px;
+  }
+  //轮播图
+  .slideShow {
+    height: 451px;
+
+    .swiper-pagination-bullets {
+      bottom: 15px;
+     
+    }
+    // 
+
+    .swiper-container {
+      height: 451px;
+    }
+    .swiper-button-prev {
+      left: 274px;
+    }
+  }
+}
+
+.newGoods {
+    height: 743px;
+    background-color: #F5F5F5;
+    .container {
+
+      .phone{
+       
+        .title{
+          height: 50px;
+          font-size: 22px; 
+          line-height: 50px;
+        }
+
+      }
+
+      .detail{
+        position: absolute;
+        overflow: hidden;
+        .left{
+          width: 224px;
+          height: 619px;
+          float: left;
+          a{
+            width: 100%;
+          }
+        }
+
+        .newPhones{
+         
+           width: 1002px;
            
-            height: 50px;
-            a{
-              line-height: 50px;
-              color: #fff;
-              font-size: 16px;
-              padding:0  30px;
+           float: left;
+
+
+          &>ul:last-child{
+            position: absolute;
+            bottom: 0;right: 0;
+          }    
+
+          &>ul{
+            width: 1002px;
+            overflow: hidden;
+
+            &>li{
+              float: left;
+              margin-left: (1002px-236*4)/4;
               display: flex;
               align-items: center;
-              justify-content: space-between;
-
-              .fa{
-                font-size: 20px;
+              flex-direction: column;
+              &>span:first-child{
+                width: 67px;
+                height: 24px;
+                line-height: 24px;
+                background-color: #7ECF68;
+                color: #fff;
+                text-align: center;
               }
+              width: 236px;
+              height: 302px;
+              background-color: #fff;
+
+              .info{
+
+                &>p{ 
+                    text-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    line-height: 20px;
+                   color: #999;
+                  &>span:first-child{
+                    font-size: 14px;
+                    color: #000;
+                    font-weight: bold;
+                    
+                  }
+                }
+
+                a{
+                margin-top: 10px;
+                width: 236px; 
+                display: block;
+                text-align: center;
+                color: #ff6700;
+                font-size: 14px;
+                font-weight: bold;
+                             
+                  
+                  .fa{
+                    font-size: 18px;
+                    transform: translateY(2px);
+                  }
+                  
+                }
+              }
+              
             }
-            &:hover{
-              background-color: #ff6700;
+
+          }
+
+          .show{
+            width: 236px;
+            height: 195px;
+            img{
+              width: 100%;
+              height: 100%;
             }
           }
 
-          &>li:first-child:hover  .categoryDetail{
-            display: block;
 
-          }
 
         }
 
-        .categoryDetail{
-
-            width: 962px;height: 451px;
-            position: absolute;
-            background: #fff;
-            left: 264px;top: 0;
-            border: 1px solid #e5e5e5;
-            display: block;
-
-        }
-
-    }
-
-    .banner{
-      height: 130px;
-    }
-   .slideShow{
-      
-      height: 451px;
-
-      .swiper-pagination-bullets{
-        bottom: 15px;
-      }
-
-      .swiper-container{
-        height: 451px;
       } 
-      .swiper-button-prev{
-        left: 274px;
-      }
-   }
+    }
+  }
 
+  .hide{
+    visibility: hidden;
   }
 
 </style>
