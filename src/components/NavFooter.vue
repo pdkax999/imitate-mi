@@ -17,9 +17,11 @@
       </div>
     </div>
     <div class="footer-info">
-
-
-
+      <div class="logo">
+        <div class="img"> <img src="../assets/imgs/logo-footer.png" alt=""></div>
+        <span>小米商场</span>
+      </div>
+       <p class="copyright">Copyright ©2020  All Rights Reserved.</p>
     </div>
   </div>
 </template>
@@ -67,8 +69,39 @@
  }
 
  .footer-info{
- 
+
+    border-top:4px solid #ff6700;
+    .img{
+      width: 53px;
+      height: 36px;
+     
+      margin:0 auto;
+       margin-bottom: 20px;
+      img{
+        width: 100%;
+        height: 100%;
+        margin:0 auto;
+      }
+    }
+
+    .logo{
+       margin-bottom: 20px;
+      span{
+        font-size: 16px;
+        color: #fff;
+      }
+    }
+    display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+    height: 200px;
+    background-color: #333333;
 
 
+    .copyright{
+     color: #fff;
+     font-size: 16px;
+    }
  }
 </style>

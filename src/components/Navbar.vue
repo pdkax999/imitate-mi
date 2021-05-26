@@ -98,7 +98,7 @@
        }
 
       }).then((res)=>{
-
+        
        this.productList=res.list
       
       })
@@ -234,6 +234,7 @@
               top: 112px; z-index: 12;
               transition: all .5s;
               overflow: hidden;
+              background-color: #fff;
               box-shadow:0px 7px 6px 0px rgba(0, 0, 0, 0.11);
           }
 
