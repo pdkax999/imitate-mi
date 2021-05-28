@@ -1,7 +1,5 @@
 <template>
  <div>
-
-   
   <div class="container main">
     <div class="wrapper-info">
       <div class="menu-detail">

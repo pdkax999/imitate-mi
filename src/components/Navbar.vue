@@ -12,7 +12,7 @@
             <!-- <a href="javascript:;">current</a>
             <a href="javascript:;">退出</a>
             <a href="javascript:;">我的订单</a> -->
-            <a href="javascript:;">登录</a>
+            <a href="/login">登录</a>
             <a href="javascript:;" class="my-cart">
               <span class="cart">
               </span>
