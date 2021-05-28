@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    <div class="footer-afterSale">
+    <div class="footer-afterSale" v-if="showBar">
       <div class="info container">
         <div class="item">
          <span class="fa fa-wrench"></span> 预约维修服务
@@ -28,6 +28,15 @@
 
 <script type="text/ecmascript-6">
   export default {
+    props:{
+
+      showBar:{
+        type:Boolean,
+        default: true
+      }
+
+    }
+
   }
 </script>
 

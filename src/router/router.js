@@ -7,6 +7,7 @@ import Detail from "../pages/Home/children/Detail.vue";
 import Login from "../pages/Login/Login.vue";
 import Order from "../pages/Order/Order.vue";
 import Cart from "../pages/Cart/Cart.vue";
+import Register from "../pages/Register/Register.vue";
 
 
 Vue.use(VueRouter)
@@ -52,6 +53,11 @@ export default new VueRouter({
       path:'/cart',
       name:'cart',
       component:Cart
+    },
+    {
+      path:'/register',
+      name:'register',
+      component:Register
     },
    
   ]

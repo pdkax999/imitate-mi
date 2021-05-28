@@ -18,7 +18,13 @@
           <button>登录</button>
         </div>
         <p class="tips">
-          <a href="javascript:;">手机短信登录/注册</a>
+          <a href="javascript:;">手机短信登录/注册</a>  <span>
+            <a href="/register">
+              立即注册
+            </a>
+            <span class="line">|</span>
+            <span>忘记密码</span>
+          </span>
         </p>
      </div>
      </div>
@@ -115,10 +121,29 @@
            }
 
            .tips{
-             a{
+             color:#A69999;
+             
+             &>a{
                color: #f60;
                font-size: 14px;
              }
+
+             &>span{
+              float: right;
+              font-size: 14px;
+              a{
+                color:#A69999;
+                   font-size: 14px;
+              }
+                .line{
+                  margin: 0 7px;
+                  font-weight: bold;
+                  transform: translateY(-4px);
+                }
+
+
+             }
+
 
            }
         }
