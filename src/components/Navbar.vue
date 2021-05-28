@@ -9,10 +9,10 @@
               <a href="javascript:;">协议规则</a>
           </div>
           <div class="user-info">
-            <!-- <a href="javascript:;">current</a>
-            <a href="javascript:;">退出</a>
-            <a href="javascript:;">我的订单</a> -->
-            <a href="/login">登录</a>
+            <a href="javascript:;" v-if="userInfo.id">{{userInfo.username}}</a>
+            <a href="javascript:;"  v-if="userInfo.id" @click="logout">退出</a>
+            <a href="javascript:;"  v-if="userInfo.id">我的订单</a>
+            <a href="/login"  v-if="!userInfo.id">登录</a>
             <a href="javascript:;" class="my-cart">
               <span class="cart">
               </span>
@@ -54,7 +54,6 @@
 <!-- 
                <div class="productList container" :class="{productListHG:showGoods}">
                </div>  -->
-
             </li>
            </ul>
         
@@ -70,7 +69,7 @@
 
 <script type="text/ecmascript-6">
 
-
+import {mapState} from "vuex";
 
   export default {
     
@@ -82,12 +81,17 @@
       }
 
     },
-    mounted(){
+    computed:{
+      
+      ...mapState(['userInfo'])
 
+    },
+    mounted(){
       this.getProductList()
 
     },
     methods:{
+
     getProductList(){
 
       this.axios.get('/products',{
@@ -104,7 +108,18 @@
       })
      
 
-     }  
+     },
+     logout(){
+
+       this.axios.post('/user/logout').then((res)=>{
+
+
+         this.$store.commit('removeinfo')
+
+       })
+      
+
+     } 
     },
     filters:{
     money(val){
@@ -152,6 +167,7 @@
           display: block;
           color: #b0b0b0;
           line-height: 39px;
+          margin-right: 17px;
         }
 
         .my-cart{
@@ -160,6 +176,7 @@
           background-color: #ff6700;
           color: #fff;
           margin-left: 17px;
+          margin-right: 0px;
           
          
           .cart{

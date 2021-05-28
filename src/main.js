@@ -6,11 +6,13 @@ import router from "./router/router.js";
 
 import axios from "axios";
 
+import store from "./store/store.js";
+
 import VueAxios from "vue-axios";
 
 import {Message} from 'element-ui'
-import VueLazyload from 'vue-lazyload';
 
+import VueLazyload from 'vue-lazyload';
 
 Vue.use(VueLazyload, {
   loading: require('../src/assets/imgs/loading-svg/loading-bars.svg')
@@ -31,18 +33,21 @@ axios.interceptors.response.use(function(response){
   let res = response.data;
 
   if(res.status == 0){
-    
+        
+     if(res.msg){
+
+      Message(res.msg);  
+
+     }
       return res.data;
 
   }else if(res.status == 10){
-    
-      if(router.currentRoute !== '/login'){
+     
+      if(router.currentRoute.path !== '/login'){
 
         router.replace('/login');
 
       }
-    // window.location.href = '/#/login';
-    
     return Promise.reject(res);
 
   }else{
@@ -63,5 +68,6 @@ axios.interceptors.response.use(function(response){
 
 new Vue({
   render: h => h(App),
-  router
+  router,
+  store
 }).$mount('#app')
