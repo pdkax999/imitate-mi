@@ -9,7 +9,7 @@ export default {
   mounted() {
 
 
-   this.autoLogin()
+  //  this.autoLogin()
 
   },
   methods: {

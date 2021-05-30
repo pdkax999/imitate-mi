@@ -35,7 +35,7 @@ axios.interceptors.response.use(function(response){
   if(res.status == 0){
         
      if(res.msg){
-
+      
       Message(res.msg);  
 
      }
@@ -54,7 +54,7 @@ axios.interceptors.response.use(function(response){
 
      Message.warning(res.msg);
 
-    return Promise.reject(res);
+    return new Promise(()=>{})
 
   }
 },(error)=>{

@@ -14,7 +14,7 @@
           </p>
           <div class="form-input">
             <input type="text" placeholder="请输入帐号" v-model="username" />
-            <input type="text" placeholder="请输入密码" v-model="password" />
+            <input type="password" placeholder="请输入密码" v-model="password" />
             <button @click="gotoLogin">登录</button>
           </div>
           <p class="tips">
@@ -68,6 +68,7 @@ export default {
           if (this.$route.path !== "/index") {
             this.$router.replace("/index");
           }
+          
         });
     }
   }

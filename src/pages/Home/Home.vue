@@ -3,7 +3,7 @@
     
     <Navbar/>  
     <router-view></router-view>
-    <NavFooter/>
+    <NavFooter :showBar="showBar"/>
   </div>
 </template>
 
@@ -16,10 +16,23 @@ import NavFooter from "../../components/NavFooter";
       NavFooter,
       Navbar
     },
-    mounted(){
-      
+    data(){
 
-      
+      return {
+         showBar:true
+
+      }
+  
+
+    },
+    methods:{
+
+    isShowBar(flay){
+
+      this.showBar = flay
+
+
+    }
     }
   }
 </script>
