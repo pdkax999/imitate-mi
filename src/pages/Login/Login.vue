@@ -63,12 +63,22 @@ export default {
         })
         .then(val => {
 
+         
+        
+
+          this.$cookie.set("usernameId", val.id, { expires: "Session" });
+
           this.$store.dispatch("getUserInfo", val);
+          
+          this.$message({
+            message: '登录成功',
+            type: "success",
+            duration: 2000
+          });
 
           if (this.$route.path !== "/index") {
             this.$router.replace("/index");
           }
-          
         });
     }
   }

@@ -12,7 +12,7 @@
           <slot></slot>
         </div>
         <div class="model-footer">
-          <a href="javascript:;" class="btn">{{sureText}}</a>
+          <a href="javascript:;" class="btn" @click="doSomething">{{sureText}}</a>
         </div>
       </div>
       <div class="mask"></div>
@@ -41,7 +41,11 @@ export default {
       this.$emit("closeModel", false);
     },
     doSomething() {
-      this.$emit("something");
+       
+      
+       
+
+      this.$emit("doSomething");
     }
   }
 };

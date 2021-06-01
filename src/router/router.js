@@ -8,6 +8,7 @@ import Login from "../pages/Login/Login.vue";
 import Order from "../pages/Order/Order.vue";
 import Cart from "../pages/Cart/Cart.vue";
 import Register from "../pages/Register/Register.vue";
+import Test from "../pages/test/Test.vue";
 
 
 Vue.use(VueRouter)
@@ -36,6 +37,7 @@ export default new VueRouter({
         {
           path:'/detail/:id',
           name: 'detail',
+          props:true,
           component:Detail
         },
       ]
@@ -59,6 +61,11 @@ export default new VueRouter({
       path:'/register',
       name:'register',
       component:Register
+    },
+    {
+      path:'/test',
+      name:'test',
+      component:Test
     },
    
   ]

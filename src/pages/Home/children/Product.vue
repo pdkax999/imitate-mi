@@ -123,13 +123,9 @@ export default {
     getProductinfo(){
 
       this.axios.get('/products/'+this.id).then((val)=>{
-
        this.Productinfo = val  
         
-
       })
-
-
     }
 
   }

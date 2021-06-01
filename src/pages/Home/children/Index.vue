@@ -116,7 +116,7 @@
                     <span>{{ph.name}}</span>
                     <span>{{ph.subtitle}}</span>
                   </p>
-                  <a href="javascript:;" @click="isShowModel(true)">
+                  <a href="javascript:;" @click="addGoods(ph.id)">
                     {{ph.price}}元
                     <span class="fa fa-shopping-cart"></span>
                   </a>
@@ -127,20 +127,20 @@
         </div>
       </div>
     </div>
-    <Modelbox 
-     sureText="查看购物车"
-    :showModel="showMode"     
-    @closeModel="isShowModel" 
-    @doSomething="gotoCart">
-        <template>
-            <div>商品添加成功!</div>
-        </template>
+    <Modelbox
+      sureText="查看购物车"
+      :showModel="showMode"
+      @closeModel="isShowModel"
+      @doSomething="gotoCart"
+    >
+      <template>
+        <div>商品添加成功!</div>
+      </template>
     </Modelbox>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-
 import chunk from "lodash/chunk";
 
 import Modelbox from "../../../components/Modelbox.vue";
@@ -153,7 +153,7 @@ export default {
   components: {
     swiper,
     swiperSlide,
-     Modelbox
+    Modelbox
   },
   data() {
     return {
@@ -204,31 +204,29 @@ export default {
         [0, 0, 0, 0]
       ],
       slideshowImg: [
-       {
-         id:"42",
-         url:"slider/slide-1.jpg",
+        {
+          id: "42",
+          url: "slider/slide-1.jpg"
         },
         {
-          id:'45',
-          url:"slider/slide-2.jpg"
+          id: "45",
+          url: "slider/slide-2.jpg"
         },
         {
-          id:'42',
-          url:"slider/slide-3.jpg",
+          id: "42",
+          url: "slider/slide-3.jpg"
         },
         {
-          id:'45',
-           url:"slider/slide-3.jpg",          
+          id: "45",
+          url: "slider/slide-3.jpg"
         },
-         {
-           id:'46',
-           url:"slider/slide-5.jpg"
-         }
-              
+        {
+          id: "46",
+          url: "slider/slide-5.jpg"
+        }
       ],
       phoneArrs: [],
-      showMode:false,
-     
+      showMode: false
     };
   },
   mounted() {
@@ -249,14 +247,25 @@ export default {
           this.phoneArrs = chunk(arr, 4);
         });
     },
-    isShowModel(flay){
-
-      this.showMode=flay 
-
+    isShowModel(flay) {
+      this.showMode = flay;
     },
-    gotoCart(){
+    addGoods(id) {
+      if (!this.$cookie.get("usernameId")) {
+        this.$router.replace("/login");
 
-      
+        return;
+      }
+
+      this.axios.post("/carts", { productId: id, selected: true }).then(res => {
+        
+        this.isShowModel(true);
+      });
+    },
+    gotoCart() {
+
+     this.$router.replace('/cart')
+
 
     }
   }
@@ -266,7 +275,6 @@ export default {
 .main {
   .wrapper-info {
     height: 641px;
-    // background: #bfa;
   }
   .menuLeft {
     position: absolute;

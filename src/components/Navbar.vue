@@ -24,7 +24,7 @@
     <div class="bot-header">
       <div class="container">
         <div class="header-logo">
-          <a href="javascript:;">
+          <a href="/">
             <img src="../assets/imgs/logo-mi2.png" alt="logo" />
           </a>
         </div>
@@ -162,6 +162,14 @@ export default {
 
     logout() {
       this.axios.post("/user/logout").then(res => {
+        
+       this.$message({
+            message: '退出,登录成功',
+            type: "success",
+            duration: 2000
+          });
+
+        this.$cookie.delete("usernameId");
         this.$store.commit("removeinfo");
       });
     }

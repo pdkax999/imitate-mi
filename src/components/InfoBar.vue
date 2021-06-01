@@ -12,22 +12,18 @@
       <li class="line">|</li>
       <li >用户评价</li>
     </ul>
-    <div class="buy" v-if="isShowBay"><a href="/detail/42">
+    <div class="buy" v-if="isShowBay"><a :href="`/detail/${productInfo.id}`">
         立即购买
       </a></div>
     </div>
-    
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   export default {
-    props:['productInfo'],
     data(){
-
       return {
         isAdsorb:false,
-       
       }
 
     },
@@ -35,7 +31,8 @@
       isShowBay:{
         type:Boolean,
          default: true
-      }
+      },
+      productInfo:Object
     },
     mounted(){
 

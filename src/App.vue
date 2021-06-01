@@ -8,22 +8,17 @@
 export default {
   mounted() {
 
-
-  //  this.autoLogin()
+  if(!this.$cookie.get("usernameId")) return 
+   this.autoLogin()
 
   },
   methods: {
-    // autoLogin() {
-    //   this.axios.get("/user").then(val => {
-    //     console.log(val);
-
-    //     this.$store.dispatch("getUserInfo", val);
-
-    //     // if (this.$route.path !== "/index") {
-    //     //   this.$router.replace("/index");
-    //     // }
-    //   });
-    // }
+    autoLogin() {
+      this.axios.get("/user").then(val => {
+     
+      this.$store.dispatch("getUserInfo", val);
+      });
+    }
   }
 };
 </script>

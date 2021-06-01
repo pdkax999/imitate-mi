@@ -6,11 +6,15 @@ import router from "./router/router.js";
 
 import axios from "axios";
 
+import VueCookie from "vue-cookie";
+
 import store from "./store/store.js";
 
 import VueAxios from "vue-axios";
 
-import {Message} from 'element-ui'
+import {
+  Message
+} from 'element-ui'
 
 import VueLazyload from 'vue-lazyload';
 
@@ -19,6 +23,8 @@ Vue.use(VueLazyload, {
 })
 
 Vue.use(VueAxios, axios)
+
+Vue.use(VueCookie)
 
 Vue.config.productionTip = false
 
@@ -29,39 +35,41 @@ axios.defaults.baseURL = '/api';
 axios.defaults.timeout = 5000
 
 
-axios.interceptors.response.use(function(response){
+axios.interceptors.response.use(function (response) {
   let res = response.data;
 
-  if(res.status == 0){
-        
-     if(res.msg){
-      
-      Message(res.msg);  
+  if (res.status == 0) {
 
-     }
-      return res.data;
+    return res.data;
 
-  }else if(res.status == 10){
-     
-      if(router.currentRoute.path !== '/login'){
+  } else if (res.status == 10) {
 
-        router.replace('/login');
+    Message({
+      message: '当前未登录',
+      type: 'warning'
+    });
 
-      }
-    return Promise.reject(res);
+    if (router.currentRoute.path !== '/login') {
 
-  }else{
+      router.replace('/login');
 
-     Message.warning(res.msg);
-
+    }
+   
     return new Promise(()=>{})
 
+  } else {
+
+    Message.warning(res.msg);
+
+    return new Promise(() => {})
+
   }
-},(error)=>{
-     
+}, (error) => {
+  console.log(error);
+  
   Message.error(error.message);
 
-   return  new Promise(()=>{})
+  return new Promise(() => {})
 });
 
 
