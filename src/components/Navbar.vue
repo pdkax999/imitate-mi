@@ -13,9 +13,9 @@
           <a href="javascript:;" v-if="userInfo.id" @click="logout">退出</a>
           <a href="javascript:;" v-if="userInfo.id">我的订单</a>
           <a href="/login" v-if="!userInfo.id">登录</a>
-          <a href="javascript:;" class="my-cart">
+          <a href="javascript:;" class="my-cart" @click="overCart">
             <span class="cart"></span>
-            购物车(0)
+            购物车({{cartsNum}})
           </a>
         </div>
       </div>
@@ -87,7 +87,6 @@
 
 <script type="text/ecmascript-6">
 import { mapState } from "vuex";
-
 export default {
   data() {
     return {
@@ -141,7 +140,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo","cartsNum"])
   },
   mounted() {
     this.getProductList();
@@ -172,6 +171,13 @@ export default {
         this.$cookie.delete("usernameId");
         this.$store.commit("removeinfo");
       });
+    },
+    overCart(){
+
+      let path = this.userInfo.id  ? '/cart' : '/login'
+
+     this.$router.replace(path)
+      
     }
   },
   filters: {

@@ -8,6 +8,7 @@ import Login from "../pages/Login/Login.vue";
 import Order from "../pages/Order/Order.vue";
 import Cart from "../pages/Cart/Cart.vue";
 import Register from "../pages/Register/Register.vue";
+import Confirm from "../pages/Order/children/Confirm.vue";
 import Test from "../pages/test/Test.vue";
 
 
@@ -50,7 +51,12 @@ export default new VueRouter({
     {
       path:'/order',
       name:'order',
-      component:Order
+      component:Order,
+      children:[{
+       path:'confirm',
+       name:'confirm',
+       component:Confirm,       
+      }]
     },
     {
       path:'/cart',

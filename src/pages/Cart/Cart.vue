@@ -6,7 +6,7 @@
         <div class="totalDetail">
           <div class="col-1">
             <!-- class="fa fa-check-square" -->
-            <span :class="{'fa fa-check-square':isSelectAll}"></span>
+            <span :class="{'fa fa-check-square':isSelectAll}" @click="isSelectGoodsAll"></span>
             全选
           </div>
           <div class="col-3">商品名称</div>
@@ -17,7 +17,7 @@
         </div>
         <ul class="goodsCarts">
           <li v-for="(cart) in cartList" :key="cart.id">
-            <div class="select col-1">
+            <div class="select col-1" @click="isSelectGoods(cart)">
               <span :class="{'fa fa-check-square':cart.productSelected}"></span>
             </div>
             <div class="detail col-3">
@@ -50,22 +50,22 @@
             <span>
               共
               <span class="bg">{{cartList.length}}</span>件商品,&nbsp;&nbsp;已选择
-              <span class="bg">1</span>件
+              <span class="bg">{{pitch}}</span>件
             </span>
           </div>
           <div class="allPrice">
             <div class="all">
               合计:
-              <span>1399元</span>
+              <span>{{totalPrice}}元</span>
             </div>
             <div class="btn">
-              <a href="javascript:;">去结算</a>
+              <a href="/cart/confirm">去结算</a>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <NavFooter />
+    <NavFooter/>
   </div>
 </template>
 
@@ -75,8 +75,8 @@ import NavFooter from "../../components/NavFooter.vue";
 export default {
   data() {
     return {
-      cartList: []
-      // isSelectAll:true
+      cartList: [],
+      totalPrice: 0
     };
   },
   components: {
@@ -84,16 +84,25 @@ export default {
     NavFooter
   },
   computed: {
-    isSelectAll: {
-      get() {
-        const { cartList } = this;
+    isSelectAll() {
+      const { cartList } = this;
 
-        return (
-          cartList.reduce((pre, goods) => {
-            return goods.productSelected ? (pre += 1) : (pre += 0);
-          }, 0) === cartList.length
-        );
-      }
+      this.isAllGoods =
+        cartList.reduce((pre, goods) => {
+          return goods.productSelected ? (pre += 1) : (pre += 0);
+        }, 0) === cartList.length;
+
+      return this.isAllGoods;
+    },
+    pitch(){
+
+     return this.cartList.reduce((pre,cart)=>{
+
+        pre+= cart.productSelected ? 1 : 0
+
+        return pre 
+      },0)
+
     }
   },
   mounted() {
@@ -101,18 +110,31 @@ export default {
     // this.selectAllGood();
   },
   methods: {
+    gettotalPrice() {
+      this.totalPrice = this.cartList.reduce((pre, cart) => {
+        return (pre += cart.quantity * cart.productPrice);
+      }, 0);
+    },
+    //获取列表
     getCartList() {
       this.axios("/carts").then(val => {
-        //  this.cartList
-
         this.cartList = val.cartProductVoList;
+
+        this.gettotalPrice();
       });
     },
+    //移除列表
     removeProduct(cart) {
       this.axios.delete(`/carts/${cart.productId}`).then(val => {
         this.cartList.splice(this.cartList.indexOf(cart), 1);
+
+        this.$message({
+          message: "删除成功",
+          type: "success"
+        });
       });
     },
+    //增加或者减少购物车的数量
     updateCount(add, cart) {
       const { productId, quantity } = cart;
 
@@ -122,6 +144,14 @@ export default {
         moment += 1;
       } else {
         moment -= 1;
+        if (moment < 1) {
+          this.$message({
+            message: "请至少保留一件",
+            type: "warning",
+            duration: 2000
+          });
+          return;
+        }
       }
 
       this.axios
@@ -132,21 +162,35 @@ export default {
         .then(val => {
           cart.quantity = moment;
         });
+    },
+    isSelectGoodsAll() {
+      let path = !this.isAllGoods ? "/carts/selectAll" : "/carts/unSelectAll";
+
+      this.axios.put(path).then(val => {
+        this.cartList.forEach(cart => {
+          cart.productSelected = !cart.productSelected;
+        });
+      });
+
+      this.isAllGoods = !this.isAllGoods;
+    },
+    isSelectGoods(cart) {
+      this.axios
+        .put(`/carts/${cart.productId}`, {
+          selected: !cart.productSelected
+        })
+        .then(() => {
+          cart.productSelected = !cart.productSelected;
+        });
     }
-    //   isselectAll(){
-
-    // /*    if(){
-
-    //    }else{
-
-    //      this.axios.put('/carts/unSelectAll').then((val)=>{
-
-    //         console.log(val);
-
-    //     })
-    //    } */
-
-    //   }
+  },
+  watch: {
+    cartList: {
+      deep: true,
+      handler(val) {
+        this.gettotalPrice();
+      }
+    }
   }
 };
 </script>

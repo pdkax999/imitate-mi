@@ -251,6 +251,7 @@ export default {
       this.showMode = flay;
     },
     addGoods(id) {
+      
       if (!this.$cookie.get("usernameId")) {
         this.$router.replace("/login");
 
@@ -258,7 +259,7 @@ export default {
       }
 
       this.axios.post("/carts", { productId: id, selected: true }).then(res => {
-        
+        this.$store.dispatch('getCartsNum')
         this.isShowModel(true);
       });
     },

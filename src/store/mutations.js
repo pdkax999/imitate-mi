@@ -1,4 +1,4 @@
-import {RECEIVEINFO,REMOVEINFO} from "../store/mutationTypes.js";
+import {RECEIVEINFO,REMOVEINFO, REMOVECARTSNUM} from "../store/mutationTypes.js";
 
 export default {
  
@@ -10,6 +10,11 @@ export default {
   [REMOVEINFO](state){
 
     state.userInfo = {}
+
+  },
+  [REMOVECARTSNUM](state,val){
+
+   state.cartsNum=val
 
   }
 }

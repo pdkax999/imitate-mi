@@ -57,7 +57,7 @@
             <div class="total">总计：{{Productinfo.price}}元</div>
           </div>
           <div class="gotoCart">
-            <a href="javascript:;">加入购物车</a>
+            <a href="javascript:;" @click="addGoods">加入购物车</a>
           </div>
         </div>
       </div>
@@ -119,6 +119,20 @@ export default {
     getProductinfo() {
       this.axios.get("/products/" + this.id).then(val => {
         this.Productinfo = val;
+      });
+    },
+    addGoods() {
+
+      if (!this.$cookie.get("usernameId")) {
+          
+          this.$router.replace("/login");
+          
+         return;
+      }
+
+      this.axios.post("/carts", { productId: this.id, selected: true }).then(res => {
+         this.$router.replace("/cart");
+          this.$store.dispatch('getCartsNum')
       });
     }
   }

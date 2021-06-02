@@ -8,8 +8,8 @@
       </h1>
       <div class="title">
         <h2>
-          我的购物车
-          <span class="tips">温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</span>
+         {{title}}
+          <span class="tips">{{tips}}</span>
         </h2>
       </div>
       <div class="user">
@@ -25,10 +25,18 @@ export default {
   computed: {
     ...mapState(["userInfo"])
   },
-  mounted(){
-
+  props:{
+   title:{
+     type:String,
+      default:' 我的购物车'
+   },
+   tips:{
+      type:String,
+      default:'温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算'
+   },
    
-    
+
+
   }
 };
 </script>
