@@ -41,10 +41,6 @@ export default {
       this.$emit("closeModel", false);
     },
     doSomething() {
-       
-      
-       
-
       this.$emit("doSomething");
     }
   }
@@ -69,6 +65,7 @@ export default {
     background-color: #000;
     opacity: 0.5;
   }
+
 }
 
 .modelBox {

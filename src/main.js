@@ -36,6 +36,7 @@ axios.defaults.timeout = 5000
 
 
 axios.interceptors.response.use(function (response) {
+  
   let res = response.data;
 
   if (res.status == 0) {
@@ -65,7 +66,7 @@ axios.interceptors.response.use(function (response) {
 
   }
 }, (error) => {
-  console.log(error);
+ 
   
   Message.error(error.message);
 

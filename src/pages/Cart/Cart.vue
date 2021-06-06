@@ -5,7 +5,6 @@
       <div class="container">
         <div class="totalDetail">
           <div class="col-1">
-            <!-- class="fa fa-check-square" -->
             <span :class="{'fa fa-check-square':isSelectAll}" @click="isSelectGoodsAll"></span>
             全选
           </div>
@@ -22,7 +21,7 @@
             </div>
             <div class="detail col-3">
               <a href="javascript:;">
-                <img v-lazy="cart.productMainImage" />
+                <img v-lazy="cart.productMainImage"/>
               </a>
               <span>{{`${cart.productName},${cart.productSubtitle}`}}</span>
             </div>
@@ -37,7 +36,7 @@
               </div>
             </div>
             <div class="allPrice col-1">
-              <span>{{cart.productPrice}}</span>
+              <span>{{totalPrice}}</span>
             </div>
             <div class="opera col-1">
               <span class="fa fa-close" @click="removeProduct(cart)"></span>
@@ -56,10 +55,10 @@
           <div class="allPrice">
             <div class="all">
               合计:
-              <span>{{totalPrice}}元</span>
+              <span>{{selectPrice}}元</span>
             </div>
-            <div class="btn">
-              <a href="/cart/confirm">去结算</a>
+            <div class="btn" @click="gotoOrder">
+              <a href="javascript:;">去结算</a>
             </div>
           </div>
         </div>
@@ -76,7 +75,8 @@ export default {
   data() {
     return {
       cartList: [],
-      totalPrice: 0
+      totalPrice: 0,
+      selectPrice:0
     };
   },
   components: {
@@ -86,16 +86,18 @@ export default {
   computed: {
     isSelectAll() {
       const { cartList } = this;
-
+      
       this.isAllGoods =
         cartList.reduce((pre, goods) => {
           return goods.productSelected ? (pre += 1) : (pre += 0);
-        }, 0) === cartList.length;
+        }, 0) === cartList.length && cartList.length>0;
 
       return this.isAllGoods;
-    },
-    pitch(){
 
+    },
+
+    //数量
+    pitch(){
      return this.cartList.reduce((pre,cart)=>{
 
         pre+= cart.productSelected ? 1 : 0
@@ -106,17 +108,22 @@ export default {
     }
   },
   mounted() {
+    
     this.getCartList();
-    // this.selectAllGood();
+   
   },
   methods: {
-    gettotalPrice() {
+    gettotalPrice(cart) {  //获取商品总价格
       this.totalPrice = this.cartList.reduce((pre, cart) => {
         return (pre += cart.quantity * cart.productPrice);
       }, 0);
+     this.selectPrice = this.cartList.reduce((pre,cat)=>{
+        return cat.productSelected ? (pre += cat.quantity * cat.productPrice) : pre+=0
+      },0)
     },
     //获取列表
     getCartList() {
+
       this.axios("/carts").then(val => {
         this.cartList = val.cartProductVoList;
 
@@ -125,7 +132,9 @@ export default {
     },
     //移除列表
     removeProduct(cart) {
+
       this.axios.delete(`/carts/${cart.productId}`).then(val => {
+
         this.cartList.splice(this.cartList.indexOf(cart), 1);
 
         this.$message({
@@ -136,9 +145,9 @@ export default {
     },
     //增加或者减少购物车的数量
     updateCount(add, cart) {
-      const { productId, quantity } = cart;
+      const {productId, quantity } = cart;
 
-      let moment = quantity;
+      let moment = quantity;  //不直接操作数据
 
       if (add == "add") {
         moment += 1;
@@ -164,6 +173,7 @@ export default {
         });
     },
     isSelectGoodsAll() {
+
       let path = !this.isAllGoods ? "/carts/selectAll" : "/carts/unSelectAll";
 
       this.axios.put(path).then(val => {
@@ -171,9 +181,9 @@ export default {
           cart.productSelected = !cart.productSelected;
         });
       });
-
-      this.isAllGoods = !this.isAllGoods;
+     
     },
+
     isSelectGoods(cart) {
       this.axios
         .put(`/carts/${cart.productId}`, {
@@ -182,17 +192,34 @@ export default {
         .then(() => {
           cart.productSelected = !cart.productSelected;
         });
+    },
+
+    //跳转页面
+    gotoOrder(){
+        
+      if(this.selectPrice>0){
+        this.$router.replace('/order/confirm')
+      }else{
+        
+        this.$message({
+            message: "请选择一件商品",
+            type: "warning",
+            duration: 2000
+        })
+      }
+      
     }
   },
   watch: {
     cartList: {
       deep: true,
-      handler(val) {
+      handler() {
         this.gettotalPrice();
       }
     }
   }
 };
+
 </script>
 
 <style  lang='scss'>
