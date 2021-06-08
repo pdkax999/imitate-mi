@@ -9,6 +9,7 @@ import Order from "../pages/Order/Order.vue";
 import Cart from "../pages/Cart/Cart.vue";
 import Register from "../pages/Register/Register.vue";
 import Confirm from "../pages/Order/children/Confirm.vue";
+import OrderPay from "../pages/Order/children/OrderPay.vue";
 import Test from "../pages/test/Test.vue";
 
 
@@ -17,63 +18,67 @@ Vue.use(VueRouter)
 
 export default new VueRouter({
   mode: 'history',
-  routes:[
-    {
-      path:'/',
+  routes: [{
+      path: '/',
       name: 'home',
-      redirect:'/index',
-      component:Home,
-      children:[
-        {
-          path:'/index',
+      redirect: '/index',
+      component: Home,
+      children: [{
+          path: '/index',
           name: 'index',
-          component:Index
+          component: Index
         },
         {
-          path:'/product/:id',
+          path: '/product/:id',
           name: 'product',
-          props:true,
-          component:Product
+          props: true,
+          component: Product
         },
         {
-          path:'/detail/:id',
+          path: '/detail/:id',
           name: 'detail',
-          props:true,
-          component:Detail
+          props: true,
+          component: Detail
         },
       ]
     },
     {
-      path:'/login',
-      name:'login',
-      component:Login
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
-      path:'/order',
-      name:'order',
-      component:Order,
-      children:[{
-       path:'confirm',
-       name:'confirm',
-       component:Confirm,       
-      }]
+      path: '/order',
+      name: 'order',
+      component: Order,
+      children: [{
+          path: 'confirm',
+          name: 'confirm',
+          component: Confirm,
+        },
+        {
+          path: 'pay',
+          name: 'pay',
+          props:(route)=>({orderNo:route.query.orderNo}),
+          component: OrderPay,
+        },
+      ]
     },
     {
-      path:'/cart',
-      name:'cart',
-      component:Cart
+      path: '/cart',
+      name: 'cart',
+      component: Cart
     },
     {
-      path:'/register',
-      name:'register',
-      component:Register
+      path: '/register',
+      name: 'register',
+      component: Register
     },
     {
-      path:'/test',
-      name:'test',
-      component:Test
+      path: '/test',
+      name: 'test',
+      component: Test
     },
-   
+
   ]
 })
-

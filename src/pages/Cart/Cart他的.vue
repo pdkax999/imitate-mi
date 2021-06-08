@@ -5,7 +5,9 @@
       <div class="container">
         <div class="totalDetail">
           <div class="col-1">
-            <span :class="{'fa fa-check-square':isSelectAll}" @click="isSelectGoodsAll"></span>
+           
+            <span :class="{'fa fa-check-square': selectlGoodsAll}" @click="isSelectAll"></span>
+           
             全选
           </div>
           <div class="col-3">商品名称</div>
@@ -16,8 +18,12 @@
         </div>
         <ul class="goodsCarts">
           <li v-for="(cart) in cartList" :key="cart.id">
-            <div class="select col-1" @click="updateCount('',cart)">
-              <span :class="{'fa fa-check-square':cart.productSelected}"></span>
+            <div class="select col-1">
+              <!-- @click="isSelectGoods(cart)" -->
+              <span
+                :class="{'fa fa-check-square':cart.productSelected}"
+                @click="updateProductState('',cart)"
+              ></span>
             </div>
             <div class="detail col-3">
               <a href="javascript:;">
@@ -30,13 +36,13 @@
             </div>
             <div class="total col-2">
               <div class="num">
-                <a href="javascript:;" @click="updateCount('-',cart)">-</a>
+                <a href="javascript:;" @click="updateProductState('-',cart)">-</a>
                 <span>{{cart.quantity}}</span>
-                <a href="javascript:;" @click="updateCount('add',cart)">+</a>
+                <a href="javascript:;" @click="updateProductState('+',cart)">+</a>
               </div>
             </div>
             <div class="allPrice col-1">
-              <span>{{cart.quantity*cart.productPrice}}</span>
+              <span>{{cart.productPrice*cart.quantity}}</span>
             </div>
             <div class="opera col-1">
               <span class="fa fa-close" @click="removeProduct(cart)"></span>
@@ -49,15 +55,16 @@
             <span>
               共
               <span class="bg">{{cartList.length}}</span>件商品,&nbsp;&nbsp;已选择
-              <span class="bg">{{pitch}}</span>件
+              <span class="bg">{{totalNum}}</span>件
+              <!-- {{pitch}} -->
             </span>
           </div>
           <div class="allPrice">
             <div class="all">
               合计:
-              <span>{{selectPrice}}元</span>
+              <span>{{totalPrice}}元</span>
             </div>
-            <div class="btn" @click="gotoOrder">
+            <div class="btn" @click="gotoBuy">
               <a href="javascript:;">去结算</a>
             </div>
           </div>
@@ -72,60 +79,28 @@
 import Navply from "../../components/Navply.vue";
 import NavFooter from "../../components/NavFooter.vue";
 export default {
+
+    //所有的运算都在后台我只负责发请求哪对应数据
   data() {
     return {
       cartList: [],
-      selectPrice: 0
+      totalPrice: 0,
+      totalNum: 0, // 已选择商品总数
+      selectlGoodsAll: false
     };
-  },
-  components: {
-    Navply,
-    NavFooter
-  },
-  computed: {
-    isSelectAll() {
-      const { cartList } = this;
-
-      this.isAllGoods =
-        cartList.reduce((pre, goods) => {
-          return goods.productSelected ? (pre += 1) : (pre += 0);
-        }, 0) === cartList.length && cartList.length > 0;
-
-      return this.isAllGoods;
-    },
-
-    //数量
-    pitch() {
-      return this.cartList.reduce((pre, cart) => {
-        pre += cart.productSelected ? 1 : 0;
-        return pre;
-      }, 0);
-    }
   },
   mounted() {
     this.getCartList();
   },
   methods: {
-    gettotalPrice(cart) {
-      //获取商品总价格
-      this.selectPrice = this.cartList.reduce((pre, cat) => {
-        return cat.productSelected
-          ? (pre += cat.quantity * cat.productPrice)
-          : (pre += 0);
-      }, 0);
-    },
-    //获取列表
     getCartList() {
       this.axios("/carts").then(val => {
-        this.cartList = val.cartProductVoList;
-
-        this.gettotalPrice();
+        this.reqRenderDate(val);
       });
     },
-    //移除列表
     removeProduct(cart) {
       this.axios.delete(`/carts/${cart.productId}`).then(val => {
-        this.cartList.splice(this.cartList.indexOf(cart), 1);
+        this.reqRenderDate(val);
 
         this.$message({
           message: "删除成功",
@@ -133,12 +108,12 @@ export default {
         });
       });
     },
-    //增加或者减少购物车的数量
-    updateCount(add, cart) {
-      const { productId, quantity,productSelected} = cart;
-      let moment = quantity; //不直接操作数据
-      let Selected = productSelected
-      if (add == "add") {
+    updateProductState(type, cart) {
+      let quantity = cart.quantity;
+
+      let selected = cart.productSelected;
+
+      if (type == "+") {
         if (quantity >= cart.productStock) {
           this.$message({
             message: "商品库存不足",
@@ -148,63 +123,70 @@ export default {
 
           return;
         }
-
-        moment += 1;
-      } else if(add == '-'){
-        moment -= 1;
-        if (moment < 1) {
+        quantity++;
+      } else if (type == "-") {
+        if (quantity <= 1) {
           this.$message({
-            message: "请至少保留一件",
+            message: "商品至少保留一件",
             type: "warning",
-            duration: 2000
+            duration: 1000
           });
           return;
         }
-      }else{
 
-        Selected = !Selected
+        quantity--;
+      } else {
+        selected = !selected;
       }
-
       this.axios
-        .put(`/carts/${productId}`, {
-          quantity: moment,
-          Selected
+        .put(`/carts/${cart.productId}`, {
+          quantity,
+          selected
         })
-        .then(val => {
-          cart.quantity = moment;
-          cart.productSelected = Selected
+        .then(res => {
+          console.log(res);
+
+          this.reqRenderDate(res);
         });
     },
-    isSelectGoodsAll() {
-
-      let path = !this.isAllGoods ? "/carts/selectAll" : "/carts/unSelectAll";
+    isSelectAll() {
+      let path = !this.selectlGoodsAll
+        ? "/carts/selectAll"
+        : "/carts/unSelectAll";
 
       this.axios.put(path).then(val => {
-        this.cartList.forEach(cart => {
-          cart.productSelected = !this.isAllGoods;
-        });
+        this.reqRenderDate(val);
       });
     },
-    //跳转页面
-    gotoOrder() {
-      if (this.selectPrice > 0) {
-        this.$router.replace("/order/confirm");
-      } else {
-        this.$message({
-          message: "请选择一件商品",
-          type: "warning",
-          duration: 2000
-        });
-      }
+    reqRenderDate(res) {
+
+      this.cartList = res.cartProductVoList;
+
+      this.totalPrice = res.cartTotalPrice;
+      this.selectlGoodsAll = res.selectedAll && res.cartProductVoList.length>0;
+      this.totalNum = res.cartProductVoList.filter(
+        item => item.productSelected
+      ).length;
+      
+    },
+    gotoBuy(){
+    let result = this.cartList.every((item)=> !item.productSelected)
+    if(result){
+
+       this.$message({
+            message: "商品至少选中一件",
+            type: "warning",
+            duration: 1000
+       });
+
+       return 
     }
+    this.$router.replace('/order/confirm')
+    } 
   },
-  watch: {
-    cartList: {
-      deep: true,
-      handler() {
-        this.gettotalPrice();
-      }
-    }
+  components: {
+    Navply,
+    NavFooter
   }
 };
 </script>

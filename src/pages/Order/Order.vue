@@ -3,7 +3,7 @@
   <div class="order">
     <Navply title="订单确认" tips="请认真填写收货地址" />
     <router-view></router-view>
-    <NavFooter/>
+    <NavFooter />
   </div>
 </template>
 
@@ -12,12 +12,31 @@
 import Navply from "../../components/Navply.vue";
 import Confirm from "./children/Confirm.vue";
 import NavFooter from "../../components/NavFooter.vue";
-
 export default {
   components: {
     Navply,
     Confirm,
     NavFooter
+  },
+  watch: {
+    $route(route) {}
+  },
+  methods: {
+    updateTitle(){
+
+   
+     
+
+
+
+
+
+
+
+
+
+
+    }
   }
 };
 </script>

@@ -25,11 +25,11 @@
             </div>
             <div class="footer">
               <span class="fa fa-window-close" @click.stop="isConfirmDelete(us)"></span>
-              <span class="fa fa-link" @click.stop="isUpdateAddress(1,us)"></span>
+              <span class="fa fa-link" @click.stop="isUpdateAddress(us)"></span>
               <!-- @click.stop="verifyDelete(us)" -->
             </div>
           </div>
-          <div class="addAddress" @click="isUpdateAddress(0)" v-show="addressList.length<=2">
+          <div class="addAddress" @click="showModel=!showModel" v-show="addressList.length<=2">
             <div class="center">
               <span class="fa fa-plus-circle"></span>
               <span>添加新地址</span>
@@ -102,8 +102,8 @@
     <Modelbox
       :showModel="showModel"
       @closeModel="closeModel"
-      :title="editTitle"
-      @doSomething="editAddr"
+      title="新增确认"
+      @doSomething="addUserAddress"
     >
       <template>
         <div class="addressForm">
@@ -135,7 +135,7 @@
             ></textarea>
           </div>
           <div class="item3">
-            <input type="text" placeholder="邮编" v-model="address.receiverZip" />
+            <input type="text" placeholder="邮编" v-model=" address.receiverZip" />
           </div>
         </div>
       </template>
@@ -154,8 +154,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-import Modelbox from "../../../components/Modelbox.vue";
 
+import Modelbox from "../../../components/Modelbox.vue";
 
 export default {
   computed: {
@@ -183,12 +183,7 @@ export default {
       addressList: [], //地址数组
       isdelete: false, //展示删除模态框
       //暂存要删除的us对象
-      DelId: '',
-      totalPrice: 0, //总价格
-      userAction: 0, //默认添加   1修改
-      editTitle: "",
-      editID:'', 
-
+      isAddressDele: {}
     };
   },
   mounted() {
@@ -196,32 +191,33 @@ export default {
     this.getAddressList();
   },
   methods: {
-    isConfirmDelete({id}) {
-     this.DelId = id 
-
-     this.isdelete =true;
-
+    isConfirmDelete(us) {
+      this.isdelete = true;
+      this.isAddressDele = us;
     },
     getCartList() {
       this.axios("/carts").then(val => {
         this.goodsList = val.cartProductVoList.filter(
           cart => cart.productSelected
         );
-
-        this.totalPrice = val.cartTotalPrice;
+        this.totalPrice = val.cartTotalQuantity;
       });
     },
-    //关闭清楚表单数据
     closeModel() {
+      //关闭清楚表单数据
       Object.keys(this.address).forEach(key => {
-        this.address[key] = "";
+        if (key !== "receiverPhone") {
+          this.address[key] = "";
+        }
+        delete this.address.id;
       });
+
       this.showModel = false;
     },
-    closeDeleteModel(){
-      this.isdelete =false
-      this.DelId = ''
+    closeDeleteModel() {
+      this.isdelete = false;
     },
+
     //表单验证
     isverify() {
       const {
@@ -265,32 +261,35 @@ export default {
           type: "error"
         });
       }
-
       return !!error;
     },
-    editAddr() {
+    addUserAddress() {
       //判断数据是否合法
       let result = this.isverify();
       //不合法不执行代码
       if (result) return;
 
-      const { userAction, address } = this;
+      let path = this.address.id
+        ? `/shippings/${this.address.id}` //更新
+        : "/shippings";
 
-      let methods = userAction == 0 ? "post" : "put";
+      let handle = this.address.id ? "put" : "post";
 
-      let path = userAction == 0 ? "/shippings" : `/shippings/${this.editID}`;
+      this.axios[handle](path, this.address).then(val => {
+        // this.address.shippingId = val.shippingId; //给本地添加一个id
+        // this.addressList.push(this.address);
 
-      this.axios[methods](path, address).then(res => {
-        this.getAddressList();
-
+        this.getAddressList(); //成功更新本地列表
+        //增加还是替换
         this.$message({
-          message: !res.shippingId ? "修改地址成功" : "添加新地址成功",
+          message: this.address.id ? "修改地址成功" : "添加新地址成功",
           type: "success"
         });
 
         this.closeModel();
       });
     },
+
     //获取地址列表
     getAddressList() {
       this.axios("/shippings", {
@@ -304,10 +303,7 @@ export default {
     },
     //移除地址
     removeAddress() {
-      
-      if(this.DelId == '') return 
-
-      this.axios.delete(`/shippings/${this.DelId}`).then(() => {
+      this.axios.delete(`/shippings/${this.isAddressDele.id}`).then(() => {
         this.$message({
           message: "删除地址成功",
           type: "success"
@@ -317,53 +313,42 @@ export default {
           this.addressList.indexOf(this.isAddressDele),
           1
         );
+
         this.closeDeleteModel();
       });
     },
     //地址数据回显
-    isUpdateAddress(type, us) {
-      if (us) {
+    isUpdateAddress(us) {
+      us = JSON.parse(JSON.stringify(us));
 
-        this. editID = us.id
-        us = JSON.parse(JSON.stringify(us));
-        let keys = Object.keys(us);
-        keys.forEach(key => {
+      const { address } = this;
 
-          if (this.address[key] == undefined) {
-           
-            delete us[key]
-           }
-        });
-        this.address = us
-      }
-
-      this.editTitle = type == 0 ? "添加地址" : "修改地址";
-
-      this.userAction = type; 
+      address.id = us.id;
 
       this.showModel = true;
+
+      let keys = Object.keys(us);
+
+      keys.forEach(key => {
+        if (address[key] == undefined) {
+          delete us[key];
+        }
+      });
+
+      this.address = us;
     },
-    //去结算订单
     gotoPayment() {
-      let shippingId = this.addressList[this.led];
-      if (!shippingId) {
+      if (this.addressList.length < 1) {
         this.$message({
-          message: "收获地址选择一个",
-          type: "error",
+          message: "收获地址至少保留一个",
+          type: "warning",
           duration: 2000
         });
-
-        return 
       }
-
-      this.axios.post('orders',{
-        shippingId:shippingId.id
-      }).then((res)=>{
-
-       this.$router.replace(`/order/pay?orderNo=${res.orderNo}`)
-
-      })
     }
+
+
+    
   },
   components: {
     Modelbox
