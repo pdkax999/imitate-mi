@@ -1,7 +1,6 @@
-import {RECEIVEINFO,REMOVEINFO, REMOVECARTSNUM} from "../store/mutationTypes.js";
+import {RECEIVEINFO,REMOVEINFO, REMOVECARTSNUM,RECEIVEALIPAY} from "../store/mutationTypes.js";
 
-export default {
- 
+export default { 
   [RECEIVEINFO](state,user){
          
     state.userInfo = user
@@ -16,5 +15,9 @@ export default {
 
    state.cartsNum=val
 
+  },
+  [RECEIVEALIPAY](state,val){
+
+    state.gotoAlipay = val 
   }
 }

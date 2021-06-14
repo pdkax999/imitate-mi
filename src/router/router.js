@@ -10,7 +10,9 @@ import Cart from "../pages/Cart/Cart.vue";
 import Register from "../pages/Register/Register.vue";
 import Confirm from "../pages/Order/children/Confirm.vue";
 import OrderPay from "../pages/Order/children/OrderPay.vue";
+import Alipay from "../pages/Order/children/Alipay.vue";
 import Test from "../pages/test/Test.vue";
+
 
 
 Vue.use(VueRouter)
@@ -59,8 +61,18 @@ export default new VueRouter({
         {
           path: 'pay',
           name: 'pay',
-          props:(route)=>({orderNo:route.query.orderNo}),
+          props: (route) => ({
+            orderNo: route.query.orderNo
+          }),
           component: OrderPay,
+        },
+        {
+          path: 'alipay',
+          name: 'alipay',
+          props: (route) => ({
+            orderNo: route.query.orderNo
+          }),
+          component: Alipay,
         },
       ]
     },
@@ -79,6 +91,5 @@ export default new VueRouter({
       name: 'test',
       component: Test
     },
-
   ]
 })

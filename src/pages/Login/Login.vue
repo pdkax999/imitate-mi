@@ -102,7 +102,7 @@ export default {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50%;
-    background-color: red;
+    
 
     & > .container {
       position: relative;

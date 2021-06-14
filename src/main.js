@@ -34,7 +34,6 @@ axios.defaults.baseURL = '/api';
 
 axios.defaults.timeout = 5000
 
-
 axios.interceptors.response.use(function (response) {
   
   let res = response.data;
@@ -69,8 +68,8 @@ axios.interceptors.response.use(function (response) {
  
   
   Message.error(error.message);
-
-  return new Promise(() => {})
+ 
+   return new Promise(() => {})
 });
 
 

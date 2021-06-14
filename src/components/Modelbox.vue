@@ -12,7 +12,8 @@
           <slot></slot>
         </div>
         <div class="model-footer">
-          <a href="javascript:;" class="btn" @click="doSomething">{{sureText}}</a>
+          <a href="javascript:;" class="btn success"  @click="doSomething">{{sureText}}</a>
+          <a href="javascript:;" class="btn error"   @click="closeModel" v-if="backlogText">{{backlogText}}</a>
         </div>
       </div>
       <div class="mask"></div>
@@ -34,7 +35,8 @@ export default {
     sureText: {
       type: String,
       default: "确定"
-    }
+    },
+    backlogText:String
   },
   methods: {
     closeModel() {
@@ -114,6 +116,10 @@ export default {
       color: #fff;
       line-height: 30px;
       background-color: #ff6700;
+      margin: 0 10px;
+    }
+    .error{
+      background-color: #B0B0B0;
     }
   }
 }

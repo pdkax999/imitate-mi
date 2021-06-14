@@ -7,10 +7,12 @@
         </a>
       </h1>
       <div class="title">
-        <h2>
-         {{title}}
-          <span class="tips">{{tips}}</span>
-        </h2>
+        <slot>
+          <h2>
+            {{title}}
+            <span class="tips">{{tips}}</span>
+          </h2>
+        </slot>
       </div>
       <div class="user">
         <span>{{userInfo.username}}</span>
@@ -25,15 +27,15 @@ export default {
   computed: {
     ...mapState(["userInfo"])
   },
-  props:{
-   title:{
-     type:String,
-      default:' 我的购物车'
-   },
-   tips:{
-      type:String,
-      default:'温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算'
-   },
+  props: {
+    title: {
+      type: String,
+      default: "我的购物车"
+    },
+    tips: {
+      type: String,
+      default: "温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算"
+    }
   }
 };
 </script>
@@ -79,12 +81,8 @@ export default {
       float: right;
       line-height: 55px;
       color: #666;
-     font-size: 16px;
-
+      font-size: 16px;
     }
   }
-
-  
-   
 }
 </style>

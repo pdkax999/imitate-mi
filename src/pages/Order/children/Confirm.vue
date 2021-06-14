@@ -359,7 +359,9 @@ export default {
       this.axios.post('orders',{
         shippingId:shippingId.id
       }).then((res)=>{
-
+      
+    
+      
        this.$router.replace(`/order/pay?orderNo=${res.orderNo}`)
 
       })

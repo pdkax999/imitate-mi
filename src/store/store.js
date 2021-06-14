@@ -9,8 +9,8 @@ export default new Vuex.Store({
 
   state: {
     userInfo:{},
-    cartsNum:0
-    
+    cartsNum:0,
+    gotoAlipay:''
   },
   actions,
   mutations

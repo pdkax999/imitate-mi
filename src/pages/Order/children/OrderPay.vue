@@ -5,7 +5,6 @@
         <div class="icon">
           <span class="fa fa-check-circle"></span>
         </div>
-
         <div class="OrderDetail">
           <h2>订单提交成功！去付款咯～</h2>
           <p class="info">
@@ -71,7 +70,6 @@
             </li>
             <li>
               <span>发票信息:</span>
-
               <span>
                 <span>电子发票</span>
                 <span>个人</span>
@@ -86,33 +84,100 @@
       <div class="ways">
         <p>支持平台</p>
         <ul>
-          <li></li>
-          <li></li>
+          <li @click="gotoPay(1)"></li>
+          <li @click="gotoPay(2)"></li>
         </ul>
       </div>
     </div>
+    <we-chat-pay :show="isShowWeChat" @closeModel="isWeChatShowPay" ref="weChat" />
+    <modelbox :showModel="isConfirmPay" 
+    title="支付确认" 
+    backlogText="未完成" 
+    sureText="查看订单"
+     @closeModel="isConfirmPay=false"
+     @doSomething="$router.replace('/order/list')"
+    >
+      <template>
+        <span>你确认是否完成支付</span>
+      </template>
+    </modelbox>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import weChatPay from "../../../components/weChatPay.vue";
+import Modelbox from "../../../components/Modelbox.vue";
 export default {
   mounted() {
-    // console.log(this.orderNo);
     this.getOrderDetail();
   },
   methods: {
+    isPaySuccess() {
+      this.timer = setInterval(() => {
+        this.axios(`/orders/${this.orderNo}`).then(res => {
+          if (res.status === 20) {
+            console.log("支付成功");
+          }
+        });
+      }, 2000);
+    },
     getOrderDetail() {
+      //获取订单信息
       this.axios.get("/orders/" + this.orderNo).then(res => {
         this.orderDetail = res;
       });
-    }
+    },
+    isWeChatShowPay() {
+      //展示支付模态框
+      this.isShowWeChat = !this.isShowWeChat;
+
+      if (!this.isShowWeChat) {
+        //关闭模态框则关闭询问
+        this.isConfirmPay = true;
+        window.clearInterval(this.timer);
+      }
+    },
+    gotoPay(type) {
+      this.payType = type;
+      this.axios
+        .post("/pay", {
+          orderId: this.orderNo,
+          orderName: "小米商城",
+          amount: "0.1",
+          payType: this.payType
+        })
+        .then(res => {
+         console.log(res.content);
+         
+
+          if (type == 2) {
+            
+            this.isWeChatShowPay();
+
+            this.$refs.weChat.getQrcode(res.content); //生成二维码
+
+            this.isPaySuccess(); //询问订单是否支付成功
+          }else if(type==1){
+            
+             this.$store.commit('receiveAlipay',res.content)
+             this.$router.replace(`/order/alipay`);
+          }
+        });
+    },
   },
   props: ["orderNo"],
   data() {
     return {
       showDetail: false,
-      orderDetail: {}
+      orderDetail: {},
+      isShowWeChat: false,
+      payType: 1, //1支付宝 2微信
+      isConfirmPay: false
     };
+  },
+  components: {
+    weChatPay,
+    Modelbox
   }
 };
 </script>
