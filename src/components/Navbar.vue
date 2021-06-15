@@ -12,7 +12,7 @@
           <a href="javascript:;" v-if="userInfo.id">{{userInfo.username}}</a>
           <a href="javascript:;" v-if="userInfo.id" @click="logout">退出</a>
           <a href="/order/list" v-if="userInfo.id">我的订单</a>
-          <a href="/login" v-if="!userInfo.id">登录</a>
+          <a href="#/login" v-if="!userInfo.id">登录</a>
           <a href="javascript:;" class="my-cart" @click="overCart">
             <span class="cart"></span>
             购物车({{cartsNum}})

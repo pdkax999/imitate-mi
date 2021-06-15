@@ -1,13 +1,13 @@
 <template>
   <div id="OrderList">
-    <div class="container">
+    <div class="container" v-if="orderList.length>0">
       <ol class="goodList">
-        <li class="order" v-for="(order,index) in orderList" :key="index" v-if="order.orderItemVoList[0].createTime">
+        <li class="order" v-for="(order,index) in orderList" :key="index" v-if="order.shippingVo">
           <div class="headTitle">
             <ul>
               <li>{{order.createTime}}</li>
               <li class="line">|</li>
-              <li>{{order.shippingVo!=null ? order.shippingVo.receiverName : 'peiqi'}}</li>
+              <li>{{order.shippingVo.receiverName}}</li>
               <li class="line">|</li>
               <li>
                 订单号：
@@ -22,23 +22,19 @@
             </div>
           </div>
           <div id="goodinfo">
-            <div class="name" v-for="(goods,index) in order.orderItemVoList" :key="index">
-              <img v-lazy="goods.productImage"  :key="order.orderNo" />
+            <div class="name"  v-for="(goods,index) in order.orderItemVoList" :key="index">
+              <img v-lazy="goods.productImage" alt :key="order.orderNo"/>
               <p>
                 <span>{{goods.productName}}</span>
                 <br />
                 <span>{{goods.currentUnitPrice}}X{{goods.quantity}}元</span>
               </p>
-              <div class="statusPay" v-if="index === 0">
-                 <a href="javascript:;" @click="$router.replace({name:'pay',query:{orderNo:order.orderNo}})" v-if="order.status===10">{{order.statusDesc}} </a>
-                <a href="javascript:;" v-else>{{order.statusDesc}} </a>
-              </div>
+              <div class="statusPay" v-if="index === 0">{{order.statusDesc}}</div>
             </div>
           </div>
         </li>
       </ol>
-
-      <div id="pag" v-if="true">
+      <div id="pag">
         <div class="left">
           <el-pagination
             background
@@ -48,92 +44,53 @@
           ></el-pagination>
         </div>
       </div>
-
-      <div class="load-more" v-if="isShow && orderList.length>0">
-        <el-button :loading="loading" @click="btnLoadMore">加载更多</el-button>
-      </div>
-
-      <div
-        class="scroll-more"
-        v-infinite-scroll="loadMore"
-        infinite-scroll-disabled="busy"
-        infinite-scroll-distance="403"
-        v-if="false"
-      ></div>
     </div>
-    <div class="loading" v-if="loading"></div>
-    
+    <div class="loading" v-else></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import infiniteScroll from "vue-infinite-scroll";
-import { Button } from "element-ui";
 export default {
   methods: {
-    getOrderList(type) {
-      const { pageSize, pageNum} = this;
-      if(type!=2){
+    getOrderList() {
+      const { pageSize, pageNum } = this;
 
-         this.loading = true;
-      }
-      this.busy = true; //第一次禁用  达到阈值调用回调函数   第一次满足条件
       this.axios("/orders", {
         params: {
           pageSize,
           pageNum
         }
-      }).then(
-        res => {
-           if(type!==2){
-             this.orderList = this.orderList.concat(res.list);
-           }else{
-             this.orderList = res.list                       
-           }
-          this.total = res.total;
-          this.loading = false;
-          this.busy = false;
-          this.busy = !res.hasNextPage;
-          // this.isShow = res.hasNextPage;
-        }
-      );
+      }).then(res => {
+        this.orderList = res.list;
+        this.total = res.total;
+      });
     },
-    btnLoadMore() {
-      this.pageNum++;
-      this.getOrderList();
+    showGoods(type) {   //多余的
+      let num = this.pageNum;
+      if (type == 1) {
+        //1下一页 ,2上一页
+        this.pageNum = ++num;
+        this.getOrderList();
+      } else {
+        this.pageNum = --num;
+        this.getOrderList();
+      }
     },
-
     handleCurrentChange(num) {
       this.pageNum = num;
-      this.getOrderList(2); // 1 手动点击   // 2分页
-    },
-    loadMore() {
-      this.busy = true;
-      setTimeout(() => {
-        this.pageNum++;
-        this.getOrderList()
-      }, 500);
-    },
+      this.getOrderList();
+    }
   },
-
   mounted() {
     this.getOrderList();
   },
-
   data() {
     return {
       total: 0,
       orderList: [],
       pageNum: 1,
-      pageSize: 10,
-      loading: true,
-      isShow: false,
-      busy: false
+      pageSize: 10
     };
-  },
-  directives: { infiniteScroll },
-  components: {
-    [Button.name]: Button
   }
 };
 </script>
@@ -145,6 +102,7 @@ export default {
   .container {
     .goodList {
       & > .order {
+        // height: 223px;
         border: 1px solid #d7d7d7;
         background-color: #fff;
         margin-bottom: 31px;
@@ -204,11 +162,9 @@ export default {
             height: 145px;
             line-height: 145px;
             font-size: 20px;
+            color: #f60;
             position: absolute;
             right: 0;
-            a{
-              color: #f60;
-            }
           }
         }
       }
@@ -216,16 +172,6 @@ export default {
     #pag {
       .left {
         float: right;
-      }
-    }
-
-    .load-more {
-      display: flex;
-      justify-content: center;
-
-      & > button {
-        background-color: #ff6700;
-        color: #fff;
       }
     }
   }

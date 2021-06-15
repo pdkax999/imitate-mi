@@ -10,8 +10,10 @@ module.exports = {
           '/api':''
         }
       }
-    }
+    },
+    historyApiFallback: true, // 任意的 404 响应都被替代为 index.html
   },
+  publicPath: './',
   // publicPath:'/app',
   // outputDir:'dist',
   // indexPath:'index2.html',

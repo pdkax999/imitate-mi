@@ -71,7 +71,7 @@ axios.interceptors.response.use(function (response) {
   
   Message.error(error.message);
  
-   return new Promise(() => {})
+   return new Promise(()=>{});
 });
 
 

@@ -149,6 +149,7 @@
       <template>
         <span>您确认要删除此地址吗？</span>
       </template>
+
     </Modelbox>
   </div>
 </template>
@@ -166,6 +167,7 @@ export default {
       }, 0);
     }
   },
+  
   data() {
     return {
       goodsList: [], // 商品列表

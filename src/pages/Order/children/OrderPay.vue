@@ -86,16 +86,19 @@
         <ul>
           <li @click="gotoPay(1)"></li>
           <li @click="gotoPay(2)"></li>
+          <!-- <li>取消订单</li> -->
         </ul>
       </div>
     </div>
-    <we-chat-pay :show="isShowWeChat" @closeModel="isWeChatShowPay" ref="weChat" />
-    <modelbox :showModel="isConfirmPay" 
-    title="支付确认" 
-    backlogText="未完成" 
-    sureText="查看订单"
-     @closeModel="isConfirmPay=false"
-     @doSomething="$router.replace('/order/list')"
+    <we-chat-pay :show="isShowWeChat" @closeModel="isWeChatShowPay" ref="weChat"/>
+    
+    <modelbox
+      :showModel="isConfirmPay"
+      title="支付确认"
+      backlogText="未完成"
+      sureText="查看订单"
+      @closeModel="isConfirmPay=false"
+      @doSomething="$router.replace('/order/list')"
     >
       <template>
         <span>你确认是否完成支付</span>
@@ -103,7 +106,6 @@
     </modelbox>
   </div>
 </template>
-
 <script type="text/ecmascript-6">
 import weChatPay from "../../../components/weChatPay.vue";
 import Modelbox from "../../../components/Modelbox.vue";
@@ -116,10 +118,16 @@ export default {
       this.timer = setInterval(() => {
         this.axios(`/orders/${this.orderNo}`).then(res => {
           if (res.status === 20) {
-            console.log("支付成功");
+            this.$router.replace("/order/list");
+            this.$message({
+              message: "付款成功",
+              type: "success",
+              duration: 2000
+            });
+            window.clearInterval(this.timer);
           }
         });
-      }, 2000);
+      }, 1000);
     },
     getOrderDetail() {
       //获取订单信息
@@ -137,33 +145,30 @@ export default {
         window.clearInterval(this.timer);
       }
     },
-    gotoPay(type) {
+    gotoPay(type) {    //设计一个标识 更具标识发请求做对应的操作
       this.payType = type;
       this.axios
         .post("/pay", {
           orderId: this.orderNo,
           orderName: "小米商城",
-          amount: "0.1",
+          amount: "0.01",
           payType: this.payType
         })
         .then(res => {
-         console.log(res.content);
-         
-
           if (type == 2) {
-            
-            this.isWeChatShowPay();
+
+            this.isWeChatShowPay();         // 展现模态框
 
             this.$refs.weChat.getQrcode(res.content); //生成二维码
 
             this.isPaySuccess(); //询问订单是否支付成功
-          }else if(type==1){
-            
-             this.$store.commit('receiveAlipay',res.content)
-             this.$router.replace(`/order/alipay`);
+          } else if (type == 1) {
+            this.$store.commit("receiveAlipay", res.content);
+            this.$router.replace(`/order/alipay`);
           }
+
         });
-    },
+    }
   },
   props: ["orderNo"],
   data() {
@@ -341,19 +346,28 @@ export default {
         height: 64px;
         border: 1px solid #d7d7d7;
         cursor: pointer;
+        margin-right: 20px;
 
         &:first-child {
           background: url("../../../assets/imgs/pay/icon-ali.png") no-repeat 50%;
           background-size: 103px 38px;
           margin-top: 19px;
-          margin-right: 20px;
+         
         }
-        &:last-child {
+        &:nth-child(2){
           background: url("../../../assets/imgs/pay/icon-wechat.png") no-repeat
             50%;
           background-size: 103px 38px;
           margin-top: 19px;
         }
+
+        // &:last-child{
+        //   font-size: 20px;
+        //   text-align: center;
+          
+        //   color: #ff6700;
+        // }
+
       }
     }
   }

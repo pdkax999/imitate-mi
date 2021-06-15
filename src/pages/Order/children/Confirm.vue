@@ -198,7 +198,6 @@ export default {
   methods: {
     isConfirmDelete({id}) {
      this.DelId = id 
-
      this.isdelete =true;
 
     },
@@ -207,15 +206,16 @@ export default {
         this.goodsList = val.cartProductVoList.filter(
           cart => cart.productSelected
         );
-
         this.totalPrice = val.cartTotalPrice;
       });
     },
     //关闭清楚表单数据
     closeModel() {
+
       Object.keys(this.address).forEach(key => {
         this.address[key] = "";
       });
+
       this.showModel = false;
     },
     closeDeleteModel(){
@@ -308,6 +308,7 @@ export default {
       if(this.DelId == '') return 
 
       this.axios.delete(`/shippings/${this.DelId}`).then(() => {
+        
         this.$message({
           message: "删除地址成功",
           type: "success"
@@ -323,7 +324,6 @@ export default {
     //地址数据回显
     isUpdateAddress(type, us) {
       if (us) {
-
         this. editID = us.id
         us = JSON.parse(JSON.stringify(us));
         let keys = Object.keys(us);
@@ -345,6 +345,7 @@ export default {
     },
     //去结算订单
     gotoPayment() {
+
       let shippingId = this.addressList[this.led];
       if (!shippingId) {
         this.$message({
@@ -359,11 +360,7 @@ export default {
       this.axios.post('orders',{
         shippingId:shippingId.id
       }).then((res)=>{
-      
-    
-      
        this.$router.replace(`/order/pay?orderNo=${res.orderNo}`)
-
       })
     }
   },
