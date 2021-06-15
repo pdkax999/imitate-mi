@@ -11,6 +11,7 @@ import Register from "../pages/Register/Register.vue";
 import Confirm from "../pages/Order/children/Confirm.vue";
 import OrderPay from "../pages/Order/children/OrderPay.vue";
 import Alipay from "../pages/Order/children/Alipay.vue";
+import List from "../pages/Order/children/List.vue";
 import Test from "../pages/test/Test.vue";
 
 
@@ -69,10 +70,12 @@ export default new VueRouter({
         {
           path: 'alipay',
           name: 'alipay',
-          props: (route) => ({
-            orderNo: route.query.orderNo
-          }),
           component: Alipay,
+        },
+        {
+          path: 'list',
+          name: 'list',
+          component: List,
         },
       ]
     },

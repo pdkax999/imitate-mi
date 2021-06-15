@@ -13,7 +13,7 @@ import store from "./store/store.js";
 import VueAxios from "vue-axios";
 
 import {
-  Message
+  Message,Pagination
 } from 'element-ui'
 
 import VueLazyload from 'vue-lazyload';
@@ -23,6 +23,8 @@ Vue.use(VueLazyload, {
 })
 
 Vue.use(VueAxios, axios)
+
+Vue.use(Pagination);
 
 Vue.use(VueCookie)
 

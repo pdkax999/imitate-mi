@@ -36,6 +36,11 @@ export default {
        
         this.title = "订单支付";
         this.tips = "请请谨防钓鱼链接或诈骗电话，了解更多";
+      }else if(this.$route.path === "/order/list"){
+
+        this.title = `订单列表`;
+         this.tips = "请请谨防钓鱼链接或诈骗电话，了解更多";
+
       }
     }
   },
